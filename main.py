@@ -40,8 +40,10 @@ playerY = 300
 # Bullet
 bulletimage = pygame.image.load('asset/bullet.png')
 bullet_speed = 40
-bulletX = 0
-bulletY = 300
+bulletX = 285
+bulletY = 265
+bulletXchange = 0
+bulletYchange = 10
 bullet_state = "ready"
 
 # Enemy
@@ -67,6 +69,13 @@ def player(x,y):
 # Enemy
 def Enemy(x,y):
     screen.blit(enemyimage, (x, y))
+
+# shoot system
+def fire_Bullet(x,y):
+    global bullet_state, bulletY
+    bullet_state = "fire"
+    screen.blit(bulletimage, (x+16, y+10))
+
 # Enemy Movement
 def enemyMovement():
     global enemyX, enemyY, enemy_speed
@@ -79,6 +88,7 @@ def enemyMovement():
 
 # Update the screen
 def update():
+    global bullet_state, bulletY
     # Color RGB display
     screen.fill((0, 0, 0))
     # Background Image
@@ -87,6 +97,14 @@ def update():
     control()
     Enemy(enemyX, enemyY)
     enemyMovement()
+    #bullet movement
+    if bullet_state == "fire":
+        fire_Bullet(playerX, bulletY)
+        bulletY -= bulletYchange
+        if bulletY <= 0:
+            bulletY = playerY
+            bullet_state = "ready"
+
     draw_text(f"Posizione: {playerX}, {playerY}", 10, 10)
     pygame.display.update()
 
@@ -106,6 +124,10 @@ def control():
         playerY -= player_speed
     if key[pygame.K_DOWN]:
         playerY += player_speed
+    if key[pygame.K_SPACE] and bullet_state == "ready":
+        bulletX = playerX
+        bulletY = playerY
+        fire_Bullet(bulletX, bulletY)
 
     # Wall For The Player
     if playerX <= 0:
