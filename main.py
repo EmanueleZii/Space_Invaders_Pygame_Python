@@ -25,11 +25,14 @@ pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('asset/spaceship.png')
 pygame.display.set_icon(icon)
 
+#Background
+background = pygame.image.load('asset/background.jpg')
+
 #Player
 playerimage = pygame.image.load('asset/Ship_1.png')
 
 # Variabili Globali Player
-player_speed = 2
+player_speed = 2.3
 
 playerX = 300
 playerY = 300
@@ -68,8 +71,10 @@ def enemyMovement():
 
 #update the screen
 def update():
-    # rgb display
-    screen.fill((0, 0, 20))
+    # Rgb display
+    screen.fill((0, 0, 0))
+    # Background Image
+    screen.blit(background, (0, 0))
     player(playerX, playerY)
     control()
     Enemy(enemyX, enemyY)
