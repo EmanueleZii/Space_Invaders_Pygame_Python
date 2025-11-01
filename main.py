@@ -37,6 +37,13 @@ player_speed = 2.3
 playerX = 300
 playerY = 300
 
+# Bullet
+bulletimage = pygame.image.load('asset/bullet.png')
+bullet_speed = 40
+bulletX = 0
+bulletY = 300
+bullet_state = "ready"
+
 # Enemy
 enemyimage = pygame.image.load('asset/Ship_3.png')
 
@@ -48,18 +55,19 @@ enemyY = random.randint(0, 300)
 #UI
 font = pygame.font.Font('freesansbold.ttf', 10)
 
-#text
+# Text on Screen
 def draw_text(text, x, y, color=(255, 255, 255)):
     text_surface = font.render(text, True, color)
     screen.blit(text_surface, (x, y))
 
-#player sprite
+
+# Player Sprite
 def player(x,y):
     screen.blit(playerimage,(x, y))
-
+# Enemy
 def Enemy(x,y):
     screen.blit(enemyimage, (x, y))
-
+# Enemy Movement
 def enemyMovement():
     global enemyX, enemyY, enemy_speed
     enemyX += enemy_speed
@@ -69,9 +77,9 @@ def enemyMovement():
         enemy_speed *= -1
         enemyY += 20
 
-#update the screen
+# Update the screen
 def update():
-    # Rgb display
+    # Color RGB display
     screen.fill((0, 0, 0))
     # Background Image
     screen.blit(background, (0, 0))
@@ -82,7 +90,7 @@ def update():
     draw_text(f"Posizione: {playerX}, {playerY}", 10, 10)
     pygame.display.update()
 
-#Controlli player
+#Controlli Player
 def control():
 
     global playerX, playerY
@@ -99,7 +107,7 @@ def control():
     if key[pygame.K_DOWN]:
         playerY += player_speed
 
-    #Muri
+    # Wall For The Player
     if playerX <= 0:
         playerX = 0
     if playerY <= -2.49:
