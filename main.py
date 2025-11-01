@@ -29,7 +29,7 @@ pygame.display.set_icon(icon)
 playerimage = pygame.image.load('asset/Ship_1.png')
 
 # Variabili Globali Player
-player_speed = 0.1
+player_speed = 2
 
 playerX = 300
 playerY = 300
@@ -38,8 +38,7 @@ playerY = 300
 enemyimage = pygame.image.load('asset/Ship_3.png')
 
 # Variabili Globali Enemy
-enemy_speed = 0.1
-
+enemy_speed = 2
 enemyX = 0
 enemyY = random.randint(0, 300)
 
@@ -59,13 +58,13 @@ def Enemy(x,y):
     screen.blit(enemyimage, (x, y))
 
 def enemyMovement():
-    global enemyX, enemyY
+    global enemyX, enemyY, enemy_speed
     enemyX += enemy_speed
-    #muri per enemy
-    if enemyX <= 0:
-        enemyX = 0.3
-    if enemyX >= 580:
-        enemyX -= 580
+
+    # movement and wall per enemy
+    if enemyX <= 0 or enemyX >= 580:
+        enemy_speed *= -1
+        enemyY += 20
 
 #update the screen
 def update():
@@ -108,18 +107,11 @@ def control():
 #Game Loop
 running = True
 while running:
+    clock.tick(60)
     update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-
-
-
-
-
-
-
 
 
 
