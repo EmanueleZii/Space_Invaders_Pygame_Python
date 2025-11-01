@@ -8,7 +8,9 @@
 '''
 
 import pygame
+import random
 
+#Inizializza Pygame
 pygame.init()
 
 #creazione di un schermo
@@ -25,17 +27,21 @@ pygame.display.set_icon(icon)
 
 #Player
 playerimage = pygame.image.load('asset/Ship_1.png')
+
 # Variabili Globali Player
-speed = 0.1
+player_speed = 0.1
+
 playerX = 300
 playerY = 300
 
 # Enemy
 enemyimage = pygame.image.load('asset/Ship_3.png')
+
 # Variabili Globali Enemy
-speed = 0.1
-enemyX = 300
-enemyY = 48
+enemy_speed = 0.1
+
+enemyX = 0
+enemyY = random.randint(0, 300)
 
 #UI
 font = pygame.font.Font('freesansbold.ttf', 10)
@@ -52,32 +58,42 @@ def player(x,y):
 def Enemy(x,y):
     screen.blit(enemyimage, (x, y))
 
+def enemyMovement():
+    global enemyX, enemyY
+    enemyX += enemy_speed
+    #muri per enemy
+    if enemyX <= 0:
+        enemyX = 0.3
+    if enemyX >= 580:
+        enemyX -= 580
+
 #update the screen
 def update():
     # rgb display
     screen.fill((0, 0, 20))
     player(playerX, playerY)
+    control()
     Enemy(enemyX, enemyY)
-    Control()
+    enemyMovement()
     draw_text(f"Posizione: {playerX}, {playerY}", 10, 10)
     pygame.display.update()
 
 #Controlli player
-def Control():
+def control():
 
     global playerX, playerY
-    global speed
+    global player_speed
 
     key = pygame.key.get_pressed()
 
     if key[pygame.K_LEFT]:
-        playerX -= speed
+        playerX -= player_speed
     if key[pygame.K_RIGHT]:
-        playerX += speed
+        playerX += player_speed
     if key[pygame.K_UP]:
-        playerY -= speed
+        playerY -= player_speed
     if key[pygame.K_DOWN]:
-        playerY += speed
+        playerY += player_speed
 
     #Muri
     if playerX <= 0:
