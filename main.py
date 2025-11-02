@@ -61,11 +61,11 @@ for i in range(num_of_enemy):
     enemyX.append(0)
     enemyY.append(random.randint(0, 300))
 
-# score
+# Score
 score = 0
 
 #UI
-font = pygame.font.Font('freesansbold.ttf', 10)
+font = pygame.font.Font('freesansbold.ttf', 20)
 
 # Text on Screen
 def draw_text(text, x, y, color=(255, 255, 255)):
@@ -131,10 +131,8 @@ def update():
             bulletY = playerY
             bullet_state = "ready"
 
-
-
     #testo sullo schermo
-    draw_text(f"Score: {score}", 10, 10)
+    draw_text(f"Score: {score}", 250, 10)
 
     # update display
     pygame.display.update()
