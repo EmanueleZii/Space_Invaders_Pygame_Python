@@ -92,7 +92,8 @@ def enemyMovement():
 
 # Update the screen
 def update():
-    global bullet_state, bulletY, score
+    global bullet_state, bulletY, score, playerX, playerY, bulletX, bulletY
+    global enemyX, enemyY
     # Color RGB display
     screen.fill((0, 0, 0))
     # Background Image
@@ -118,6 +119,8 @@ def update():
         bulletY = 285
         bullet_state = "ready"
         score += 1
+        enemyX = random.randint(0, 300)
+        enemyY = random.randint(0, 300)
 
     #testo sullo schermo
     draw_text(f"Score: {score}", 10, 10)
