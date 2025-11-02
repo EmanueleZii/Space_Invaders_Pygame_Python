@@ -57,6 +57,12 @@ bulletXchange = 0
 bulletYchange = 10
 bullet_state = "ready"
 
+#game over
+game_over = False
+
+# Score punteggio
+score = 0
+
 # Enemy
 enemyimage = []
 enemyX = []
@@ -71,10 +77,12 @@ for i in range(num_of_enemy):
     enemyX.append(0)
     enemyY.append(random.randint(0, 300))
 
-# Score punteggio
-score = 0
 #UI
 font = pygame.font.Font('freesansbold.ttf', 20)
+
+def show_game_over():
+    over_text = font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(over_text, (230, 180))
 
 # Text on Screen
 def draw_text(text, x, y, color=(255, 255, 255)):
@@ -96,9 +104,19 @@ def fire_Bullet(x,y):
 
 # Enemy Movement
 def enemyMovement():
+
     global enemyX, enemyY, enemy_speed, num_of_enemy, score
-    global bulletX, bulletY, bullet_state
+    global bulletX, bulletY, bullet_state, game_over
+    if game_over:
+        return
     for i in range(num_of_enemy):
+        # se un nemico supera il giocatore → game over
+        if enemyY[i] > 360:
+            game_over = True
+            for j in range(num_of_enemy):
+                enemyY[j] = 2000
+            return
+
         enemyX[i] += enemy_speed[i]
 
         # movement and wall per enemy
@@ -127,7 +145,15 @@ def update():
     screen.blit(background, (0, 0))
     #player
     player(playerX, playerY)
-    control()
+    if not game_over:
+        control()
+        for i in range(num_of_enemy):
+            Enemy(i)
+        enemyMovement()
+    else:
+        show_game_over()
+
+    #control()
     #enemy
     for i in range(num_of_enemy):
         Enemy(i)
