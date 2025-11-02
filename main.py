@@ -48,12 +48,18 @@ bulletYchange = 10
 bullet_state = "ready"
 
 # Enemy
-enemyimage = pygame.image.load('asset/Ship_3.png')
+enemyimage = []
+enemyX = []
+enemyY = []
+enemy_speed = []
+num_of_enemy = 6
 
-# Variabili Globali Enemy
-enemy_speed = 2
-enemyX = 0
-enemyY = random.randint(0, 300)
+for i in range(num_of_enemy):
+    enemyimage.append(pygame.image.load('asset/Ship_3.png'))
+    # Variabili Globali Enemy
+    enemy_speed.append(2)
+    enemyX.append(0)
+    enemyY.append(random.randint(0, 300))
 
 # score
 score = 0
@@ -71,8 +77,8 @@ def draw_text(text, x, y, color=(255, 255, 255)):
 def player(x,y):
     screen.blit(playerimage,(x, y))
 # Enemy
-def Enemy(x,y):
-    screen.blit(enemyimage, (x, y))
+def Enemy(i):
+    screen.blit(enemyimage[i], (enemyX[i], enemyY[i]))
 
 # shoot system
 def fire_Bullet(x,y):
@@ -82,13 +88,23 @@ def fire_Bullet(x,y):
 
 # Enemy Movement
 def enemyMovement():
-    global enemyX, enemyY, enemy_speed
-    enemyX += enemy_speed
+    global enemyX, enemyY, enemy_speed, num_of_enemy, score
+    global bulletX, bulletY, bullet_state
+    for i in range(num_of_enemy):
+        enemyX[i] += enemy_speed[i]
 
-    # movement and wall per enemy
-    if enemyX <= 0 or enemyX >= 580:
-        enemy_speed *= -1
-        enemyY += 20
+        # movement and wall per enemy
+        if enemyX[i] <= 0 or enemyX[i] >= 580:
+            enemy_speed[i] *= -1
+            enemyY[i] += 20
+        # Collision
+        collision = IsCollision(enemyX[i], enemyY[i], bulletX, bulletY)
+        if collision == True:
+            bulletY = 285
+            bullet_state = "ready"
+            score += 1
+            enemyX[i] = random.randint(0, 300)
+            enemyY[i] = random.randint(0, 300)
 
 # Update the screen
 def update():
@@ -102,7 +118,9 @@ def update():
     player(playerX, playerY)
     control()
     #enemy
-    Enemy(enemyX, enemyY)
+    for i in range(num_of_enemy):
+        Enemy(i)
+
     enemyMovement()
 
     #Bullet movement
@@ -113,14 +131,7 @@ def update():
             bulletY = playerY
             bullet_state = "ready"
 
-    # Collision
-    collision = IsCollision(enemyX, enemyY, bulletX, bulletY)
-    if collision == True:
-        bulletY = 285
-        bullet_state = "ready"
-        score += 1
-        enemyX = random.randint(0, 300)
-        enemyY = random.randint(0, 300)
+
 
     #testo sullo schermo
     draw_text(f"Score: {score}", 10, 10)
@@ -132,7 +143,8 @@ def update():
 def control():
 
     global playerX, playerY
-    global player_speed,enemyX, enemyY, bulletX, bulletY
+    global player_speed
+    global enemyX, enemyY, bulletX, bulletY
 
     key = pygame.key.get_pressed()
 
