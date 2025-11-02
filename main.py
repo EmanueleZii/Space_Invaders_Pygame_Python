@@ -1,15 +1,20 @@
 '''
 <summary>
    Classic VideoGame Space Invaders
-   Use:
-     - Python3
-     - Pygame
+   In Uso:
+     Linguaggi:
+        - Python3
+      Librerie:
+        - Pygame
+        - Random
+        - Math
 </summary>
 '''
 
 import pygame
 import random
 import math
+from pygame import mixer
 
 #Inizializza Pygame
 pygame.init()
@@ -28,6 +33,11 @@ pygame.display.set_icon(icon)
 
 #Background
 background = pygame.image.load('asset/background.jpg')
+
+# Background Music
+mixer.music.load('asset/background.wav')
+mixer.music.set_volume(0.3)
+mixer.music.play()
 
 #Player
 playerimage = pygame.image.load('asset/Ship_1.png')
@@ -61,9 +71,8 @@ for i in range(num_of_enemy):
     enemyX.append(0)
     enemyY.append(random.randint(0, 300))
 
-# Score
+# Score punteggio
 score = 0
-
 #UI
 font = pygame.font.Font('freesansbold.ttf', 20)
 
@@ -71,7 +80,6 @@ font = pygame.font.Font('freesansbold.ttf', 20)
 def draw_text(text, x, y, color=(255, 255, 255)):
     text_surface = font.render(text, True, color)
     screen.blit(text_surface, (x, y))
-
 
 # Player Sprite
 def player(x,y):
@@ -100,6 +108,9 @@ def enemyMovement():
         # Collision
         collision = IsCollision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision == True:
+            explosion_sound = mixer.Sound('asset/explosion.wav')
+            explosion_sound.set_volume(0.3)
+            explosion_sound.play()
             bulletY = 285
             bullet_state = "ready"
             score += 1
@@ -158,6 +169,9 @@ def control():
         bulletX = playerX
         bulletY = playerY
         fire_Bullet(bulletX, bulletY)
+        bulletsound = mixer.Sound('asset/laser.wav')
+        bulletsound.set_volume(0.3)
+        bulletsound.play()
 
     # Wall For The Player
     if playerX <= 0:
