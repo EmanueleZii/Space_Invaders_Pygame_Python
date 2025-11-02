@@ -9,6 +9,7 @@
 
 import pygame
 import random
+import math
 
 #Inizializza Pygame
 pygame.init()
@@ -54,6 +55,9 @@ enemy_speed = 2
 enemyX = 0
 enemyY = random.randint(0, 300)
 
+# score
+score = 0
+
 #UI
 font = pygame.font.Font('freesansbold.ttf', 10)
 
@@ -88,16 +92,19 @@ def enemyMovement():
 
 # Update the screen
 def update():
-    global bullet_state, bulletY
+    global bullet_state, bulletY, score
     # Color RGB display
     screen.fill((0, 0, 0))
     # Background Image
     screen.blit(background, (0, 0))
+    #player
     player(playerX, playerY)
     control()
+    #enemy
     Enemy(enemyX, enemyY)
     enemyMovement()
-    #bullet movement
+
+    #Bullet movement
     if bullet_state == "fire":
         fire_Bullet(playerX, bulletY)
         bulletY -= bulletYchange
@@ -105,14 +112,24 @@ def update():
             bulletY = playerY
             bullet_state = "ready"
 
-    draw_text(f"Posizione: {playerX}, {playerY}", 10, 10)
+    # Collision
+    collision = IsCollision(enemyX, enemyY, bulletX, bulletY)
+    if collision == True:
+        bulletY = 285
+        bullet_state = "ready"
+        score += 1
+
+    #testo sullo schermo
+    draw_text(f"Score: {score}", 10, 10)
+
+    # update display
     pygame.display.update()
 
 #Controlli Player
 def control():
 
     global playerX, playerY
-    global player_speed
+    global player_speed,enemyX, enemyY, bulletX, bulletY
 
     key = pygame.key.get_pressed()
 
@@ -138,6 +155,14 @@ def control():
         playerY = 340
     if playerX >= 580:
         playerX = 580
+
+
+def IsCollision(enemyX, enemyY, bulletX, bulletY):
+    distance = math.sqrt(math.pow(enemyX - bulletX, 2) + math.pow(enemyY - bulletY, 2))
+    if distance < 27:
+        return True
+    else:
+        return False
 
 #Game Loop
 running = True
